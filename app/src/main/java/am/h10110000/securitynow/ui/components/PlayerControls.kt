@@ -1,4 +1,5 @@
 package am.h10110000.securitynow.ui.components
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -7,6 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import am.h10110000.securitynow.R
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.CircleShape
 
 @Composable
 fun PlayerControls(
@@ -19,14 +22,21 @@ fun PlayerControls(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.surface, CircleShape)
+        , // Adds horizontal spacing,
         horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+
+
     ) {
         IconButton(
+
             onClick = onBack,
-            modifier = Modifier.size(48.dp)
+            modifier = Modifier
+                .size(48.dp)
                 .padding(horizontal = 8.dp) // Adds horizontal spacing
+
 
         ) {
             Icon(
@@ -67,7 +77,8 @@ fun PlayerControls(
         }
         IconButton(
             onClick = onNext,
-            modifier = Modifier.size(48.dp)
+            modifier = Modifier
+                .size(48.dp)
                 .padding(horizontal = 8.dp) // Adds horizontal spacing
 
         ) {

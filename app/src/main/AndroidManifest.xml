@@ -15,14 +15,12 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_podcast_nobg"
         android:supportsRtl="false"
-        android:theme="@style/Theme.SecurityNow"
-        tools:targetApi="31"
-        >
+        android:theme="@style/Theme.AppCompat"
+        tools:targetApi="31">
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:launchMode="singleTop"
-            >
+            android:launchMode="singleTop">
             <intent-filter>
 
                 <action android:name="android.intent.action.MAIN" />
@@ -31,8 +29,16 @@
         </activity>
         <service
             android:name=".service.PlayerService"
-            android:foregroundServiceType="mediaPlayback"
-            android:exported="false" />
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+        <receiver android:name=".service.PlayerBroadcastReceiver" android:enabled="true" android:exported="false"> <!-- Use your receiver class name -->
+            <!-- Set exported to true -->
+            <intent-filter>
+                <action android:name="am.h10110000.securitynow.ACTION_PLAY_PAUSE" />
+                <action android:name="am.h10110000.securitynow.ACTION_REWIND" />
+                <action android:name="am.h10110000.securitynow.ACTION_FAST_FORWARD" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

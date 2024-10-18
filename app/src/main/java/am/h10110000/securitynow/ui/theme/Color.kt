@@ -17,7 +17,7 @@ val ProgrammerSurface = Color(0xFF3E4451)
 // Light Blue Theme
 val LightBluePrimary = Color(0xFF2196F3)
 val LightBlueBackground = Color.White
-val LightBlueSurface = Color(0xFFF5F5F5)
+val LightBlueSurface = Color(0xFF21ECF3)
 
 // Black and White Theme
 val MonoPrimary = Color.White

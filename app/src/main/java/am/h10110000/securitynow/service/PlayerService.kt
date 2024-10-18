@@ -98,8 +98,17 @@ class PlayerService : Service() {
                 addAction(action.toString())
             }
         }
-        registerReceiver(broadcastReceiver, intentFilter)
+
     }
+//    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+//        when (intent?.action) {
+//            PlayerActions.PLAY_PAUSE.toString() -> togglePlayPause()
+//            PlayerActions.REWIND.toString() -> seekBackward()
+//            PlayerActions.FAST_FORWARD.toString() -> seekForward()
+//        }
+//        return START_STICKY
+//    }
+
 
     override fun onBind(intent: Intent): IBinder {
         return binder
@@ -144,15 +153,7 @@ class PlayerService : Service() {
         sleepTimer.cancelTimer()
     }
 
-    private val broadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            when (intent?.action) {
-                PlayerActions.PLAY_PAUSE.toString() -> togglePlayPause()
-                PlayerActions.REWIND.toString() -> seekBackward()
-                PlayerActions.FAST_FORWARD.toString() -> seekForward()
-            }
-        }
-    }
+
 
 
     fun loadAndPlay(url: String, episodeNumber: Int) {
