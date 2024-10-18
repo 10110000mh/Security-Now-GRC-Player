@@ -48,12 +48,17 @@ class PlayerNotificationManager(private val context: Context) {
         mediaSession: MediaSession,
         episodeNumber: Int
     ): Notification {
-        val intent = Intent(context, MainActivity::class.java)
+        val intent = Intent(context, MainActivity::class.java).apply {
+            // Ensure the activity is brought to the front if it exists in the recent tasks
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+
+        // PendingIntent to open the MainActivity
         val pendingIntent = PendingIntent.getActivity(
             context,
             REQUEST_CODE,
             intent,
-            PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)

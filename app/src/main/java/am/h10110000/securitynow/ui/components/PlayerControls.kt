@@ -14,6 +14,8 @@ fun PlayerControls(
     onPlayPause: () -> Unit,
     onRewind: () -> Unit,
     onFastForward: () -> Unit,
+    onBack: () -> Unit,
+    onNext: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -22,8 +24,19 @@ fun PlayerControls(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
-            onClick = onRewind,
+            onClick = onBack,
             modifier = Modifier.size(48.dp)
+                .padding(horizontal = 8.dp) // Adds horizontal spacing
+
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_back),
+                contentDescription = "Fast forward 20 seconds"
+            )
+        }
+        IconButton(
+            onClick = onRewind,
+            modifier = Modifier.size(55.dp)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_rewind),
@@ -33,7 +46,7 @@ fun PlayerControls(
 
         IconButton(
             onClick = onPlayPause,
-            modifier = Modifier.size(64.dp)
+            modifier = Modifier.size(90.dp)
         ) {
             Icon(
                 painter = painterResource(
@@ -45,10 +58,21 @@ fun PlayerControls(
 
         IconButton(
             onClick = onFastForward,
-            modifier = Modifier.size(48.dp)
+            modifier = Modifier.size(55.dp)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_fast_forward),
+                contentDescription = "Fast forward 20 seconds"
+            )
+        }
+        IconButton(
+            onClick = onNext,
+            modifier = Modifier.size(48.dp)
+                .padding(horizontal = 8.dp) // Adds horizontal spacing
+
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_next),
                 contentDescription = "Fast forward 20 seconds"
             )
         }

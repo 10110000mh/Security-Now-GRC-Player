@@ -1,12 +1,12 @@
 package am.h10110000.securitynow.ui.components
 
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.input.TextFieldValue
 import kotlin.time.Duration.Companion.minutes
 
 @Composable
@@ -14,7 +14,8 @@ fun SleepTimerDialog(
     onDismiss: () -> Unit,
     onSetTimer: (Long) -> Unit
 ) {
-    val timeOptions = listOf(15L, 30L, 45L, 60L)
+    var minutesInput by remember { mutableStateOf(TextFieldValue("")) }
+    var errorMessage by remember { mutableStateOf("") }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -25,16 +26,33 @@ fun SleepTimerDialog(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                timeOptions.forEach { minutes ->
-                    Button(
-                        onClick = {
+                OutlinedTextField(
+                    value = minutesInput,
+                    onValueChange = {
+                        minutesInput = it
+                        errorMessage = "" // Clear error message when input changes
+                    },
+                    label = { Text("Enter minutes") },
+                    isError = errorMessage.isNotEmpty(),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                if (errorMessage.isNotEmpty()) {
+                    Text(errorMessage, color = MaterialTheme.colorScheme.error)
+                }
+
+                Button(
+                    onClick = {
+                        val minutes = minutesInput.text.toLongOrNull()
+                        if (minutes != null && minutes > 0) {
                             onSetTimer(minutes)
                             onDismiss()
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("$minutes minutes")
-                    }
+                        } else {
+                            errorMessage = "Please enter a valid number of minutes."
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Set Timer")
                 }
             }
         },

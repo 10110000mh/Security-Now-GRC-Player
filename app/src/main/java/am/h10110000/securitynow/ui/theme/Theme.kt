@@ -18,12 +18,34 @@ private val LightColorScheme = lightColorScheme(
     tertiary = Pink40
 )
 
+enum class AppTheme {
+    PROGRAMMER_DARK,
+    LIGHT_BLUE,
+    MONO
+}
+
 @Composable
 fun PodcastPlayerTheme(
-    darkTheme: Boolean = true,  // Default to dark theme
+    theme: AppTheme = AppTheme.PROGRAMMER_DARK,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val colorScheme = when (theme) {
+        AppTheme.PROGRAMMER_DARK -> darkColorScheme(
+            primary = ProgrammerPrimary,
+            background = ProgrammerBackground,
+            surface = ProgrammerSurface
+        )
+        AppTheme.LIGHT_BLUE -> lightColorScheme(
+            primary = LightBluePrimary,
+            background = LightBlueBackground,
+            surface = LightBlueSurface
+        )
+        AppTheme.MONO -> darkColorScheme(
+            primary = MonoPrimary,
+            background = MonoBackground,
+            surface = MonoSurface
+        )
+    }
 
     MaterialTheme(
         colorScheme = colorScheme,

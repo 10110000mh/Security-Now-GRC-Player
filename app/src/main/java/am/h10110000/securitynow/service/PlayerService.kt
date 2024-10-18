@@ -1,8 +1,10 @@
 package am.h10110000.securitynow.service
 
 import am.h10110000.securitynow.R
+import am.h10110000.securitynow.data.EpisodeManager
 import am.h10110000.securitynow.data.PreferencesManager
 import am.h10110000.securitynow.data.SleepTimer
+import am.h10110000.securitynow.globalVariable
 import android.app.NotificationManager
 import android.app.Service
 import android.content.BroadcastReceiver
@@ -30,11 +32,13 @@ class PlayerService : Service() {
     lateinit var preferencesManager: PreferencesManager
     private var currentEpisodeNumber: Int = -1
     private var progressUpdateJob: Job? = null
+    public var title = ""
 
     // Add to existing properties
     private val _currentPosition = MutableStateFlow(0L)
     val currentPosition: StateFlow<Long> = _currentPosition
-
+    private var _currentEpisode = MutableStateFlow(globalVariable)
+    var currentEpisode: StateFlow<Int> = _currentEpisode
     private val _duration = MutableStateFlow(0L)
     val duration: StateFlow<Long> = _duration
 
@@ -53,13 +57,20 @@ class PlayerService : Service() {
         fun getService(): PlayerService = this@PlayerService
     }
 
+    fun changeEpisode(num: Int) {
+        _currentEpisode.value += num
+    }
+
+    fun setEpisode(num: Int) {
+        _currentEpisode.value = num
+    }
+
     // Binder instance for client communication
     private val binder = PlayerBinder()
 
     override fun onCreate() {
         super.onCreate()
         preferencesManager = PreferencesManager(this)
-
         player = ExoPlayer.Builder(this).build().apply {
             addListener(object : Player.Listener {
                 override fun onIsPlayingChanged(isPlaying: Boolean) {
@@ -67,7 +78,8 @@ class PlayerService : Service() {
                     updateNotification()
                     updateProgressTracking(isPlaying)
                     _duration.value = duration
-
+                    _currentPosition.value = player!!.currentPosition.coerceAtLeast(0L)
+                    title = mediaMetadata.title.toString();
                 }
 
             })
@@ -92,23 +104,35 @@ class PlayerService : Service() {
     override fun onBind(intent: Intent): IBinder {
         return binder
     }
+
     private fun updateProgressTracking(isPlaying: Boolean) {
         progressUpdateJob?.cancel()
         if (isPlaying) {
             progressUpdateJob = CoroutineScope(Dispatchers.Main).launch {
                 while (isActive) {
                     player?.let { player ->
-                        _currentPosition.value = player.currentPosition
+                        _currentPosition.value = player.currentPosition.coerceAtLeast(0L)
+
                         preferencesManager.saveEpisodeState(
                             currentEpisodeNumber,
                             player.currentPosition
                         )
+                        if (player.currentPosition >= player.duration - 3500) {
+                            // Call the function that should happen after playback finishes
+                            if (preferencesManager.getAutoPlay()) {
+                                onNext()
+                                changeEpisode(1)
+                            }
+                            // Exit the loop once playback is finished
+                        }
                     }
+
                     delay(1000) // Update every second
                 }
             }
         }
     }
+
     fun startSleepTimer(minutes: Long) {
         sleepTimer.startTimer(minutes.minutes) {
             // Stop playback when timer completes
@@ -147,6 +171,7 @@ class PlayerService : Service() {
         }
         startForeground()
     }
+
     private fun startForeground() {
         player?.let { player ->
             val notification = notificationManager.getNotification(
@@ -165,7 +190,8 @@ class PlayerService : Service() {
                 mediaSession,
                 currentEpisodeNumber
             )
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.notify(1, notification)
 
         }
@@ -207,9 +233,26 @@ class PlayerService : Service() {
     }
 
     fun seekTo(toLong: Long) {
+        val safeValue = toLong.coerceAtLeast(0) // Ensure minimum value is 1000ms
         player?.apply {
-            seekTo(toLong) // 20 seconds
+            seekTo(safeValue) // 20 seconds
         }
+    }
+
+    fun onBack(): Boolean {
+        return if (player!!.currentPosition < 5000L) {
+            val url = EpisodeManager.generateEpisodeUrl(currentEpisodeNumber - 1)
+            loadAndPlay(url, currentEpisodeNumber - 1)
+            true // Return true when successfully playing the previous episode
+        } else {
+            seekTo(0)
+            false // Return false when seeking to the start
+        }
+    }
+
+    fun onNext() {
+        val url = EpisodeManager.generateEpisodeUrl(currentEpisodeNumber + 1)
+        loadAndPlay(url, currentEpisodeNumber + 1)
     }
 
 

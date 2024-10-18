@@ -30,7 +30,7 @@ fun TimerDisplay(
                 painter = painterResource(id = R.drawable.ic_clock),
                 contentDescription = "Set sleep timer",
                 modifier = Modifier
-                    .size(24.dp)
+                    .size(35.dp)
                     .clickable(onClick = onClockClick)
             )
         } else {

@@ -1,5 +1,4 @@
 package am.h10110000.securitynow.data
-
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
