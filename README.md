@@ -18,6 +18,7 @@ This app was built using **Jetpack Compose** and developed with the assistance o
 - **Check if a selected episode is available** by calculating the weeks that have passed.  
 - **Send notifications** when a new episode is released.  
 - **Quality options** Choose between high and low settings for bandwidth-impaired users.
+- **Explanation** how to use the app.
 - **Add light/dark theme** option.  
 - **Fix notification buttons**.  
 - **Fix broadcast receiver for headset controls**.  
@@ -26,7 +27,8 @@ This app was built using **Jetpack Compose** and developed with the assistance o
   - Download individual episodes and show notes.  
   - Batch download episodes.
   - offline playing
-- **Build an iOS version** to make it available for Apple users.  
+- **Build an iOS version** to make it available for Apple users.
+ 
 
 ## Contributing  
 Everyone is more than welcome to contribute! Feel free to submit feature requests, bug reports, or pull requests. Let's make this app even better together!
