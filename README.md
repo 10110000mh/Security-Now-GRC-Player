@@ -22,7 +22,7 @@ This app was built using **Jetpack Compose** and developed with the assistance o
 - **Add light/dark theme** option.  
 - **Fix notification buttons**.  
 - **Fix broadcast receiver for headset controls**.  
-- **Display artist art from metadata** in the player and allow users to enlarge it (e.g., for the "Picture of the Week").  
+- **Display artist art from metadata** in the player.  
 - **Add download options**:  
   - Download individual episodes and show notes.  
   - Batch download episodes.
