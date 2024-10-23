@@ -19,7 +19,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 var globalVariable: Int = 0
-
+var highQulity: Boolean = true
 class MainActivity : ComponentActivity() {
     private var playerService: PlayerService? = null
     lateinit var preferencesManager: PreferencesManager
@@ -29,6 +29,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         preferencesManager = PreferencesManager(this)
         globalVariable = preferencesManager.getLastEpisodeNumber()
+        highQulity = preferencesManager.getHighQuality()
         // Bind to PlayerService
         Intent(this, PlayerService::class.java).also { intent ->
             bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)

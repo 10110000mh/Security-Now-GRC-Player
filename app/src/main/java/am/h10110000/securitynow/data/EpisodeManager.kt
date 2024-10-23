@@ -1,5 +1,7 @@
 package am.h10110000.securitynow.data
 
+import am.h10110000.securitynow.highQulity
+
 class EpisodeManager {
     companion object {
         fun formatEpisodeNumber(episodeNumber: Int): String {
@@ -8,7 +10,10 @@ class EpisodeManager {
 
         fun generateEpisodeUrl(episodeNumber: Int): String {
             val formattedNumber = formatEpisodeNumber(episodeNumber)
-            return "https://twit.cachefly.net/audio/sn/sn$formattedNumber/sn$formattedNumber.mp3"
+            if (highQulity)
+                return "https://twit.cachefly.net/audio/sn/sn$formattedNumber/sn$formattedNumber.mp3"
+            return "https://media.grc.com/SN/sn-$episodeNumber-lq.mp3"
+
         }
     }
 }

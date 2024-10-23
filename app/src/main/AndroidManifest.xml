@@ -11,9 +11,9 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/ic_podcast_nobg"
+        android:icon="@drawable/ic_icon"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/ic_podcast_nobg"
+        android:roundIcon="@drawable/ic_icon"
         android:supportsRtl="false"
         android:theme="@style/Theme.AppCompat"
         tools:targetApi="31">

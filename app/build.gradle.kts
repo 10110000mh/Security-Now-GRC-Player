@@ -46,6 +46,8 @@ android {
 }
 
 dependencies {
+    implementation ("io.coil-kt:coil-compose:2.0.0") // or the latest version
+
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.compose.ui:ui:1.5.4")
     implementation("androidx.compose.material3:material3:1.1.2")

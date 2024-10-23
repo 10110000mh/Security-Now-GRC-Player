@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import am.h10110000.securitynow.R
+import androidx.compose.material3.TextButton
 import kotlin.time.Duration
 
 @Composable
@@ -26,13 +27,9 @@ fun TimerDisplay(
             )
     ) {
         if (remainingTime == null) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_clock),
-                contentDescription = "Set sleep timer",
-                modifier = Modifier
-                    .size(35.dp)
-                    .clickable(onClick = onClockClick)
-            )
+            TextButton(onClick =onClockClick) {
+                Text("Set sleep timer")
+            }
         } else {
             Text(
                 text = formatDuration(remainingTime),

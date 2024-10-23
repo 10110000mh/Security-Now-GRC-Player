@@ -11,11 +11,20 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Bitmap
 import android.os.Binder
 import android.os.IBinder
+import android.util.Log
+import androidx.annotation.OptIn
 import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.datasource.DefaultDataSourceFactory
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.ProgressiveMediaSource
+import androidx.media3.extractor.DefaultExtractorsFactory
+import androidx.media3.extractor.mp3.Mp3Extractor
 import androidx.media3.session.MediaSession
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +34,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import kotlin.time.Duration.Companion.minutes
 
 
@@ -33,7 +44,6 @@ class PlayerService : Service() {
     private var currentEpisodeNumber: Int = -1
     private var progressUpdateJob: Job? = null
     public var title = ""
-
     // Add to existing properties
     private val _currentPosition = MutableStateFlow(0L)
     val currentPosition: StateFlow<Long> = _currentPosition
@@ -42,7 +52,7 @@ class PlayerService : Service() {
     private val _duration = MutableStateFlow(0L)
     val duration: StateFlow<Long> = _duration
 
-    private var player: ExoPlayer? = null
+    var player: ExoPlayer? = null
     private val sleepTimer = SleepTimer()
     private lateinit var notificationManager: PlayerNotificationManager
     private lateinit var mediaSession: MediaSession
@@ -154,18 +164,28 @@ class PlayerService : Service() {
     }
 
 
-
-
+    @OptIn(UnstableApi::class)
     fun loadAndPlay(url: String, episodeNumber: Int) {
         currentEpisodeNumber = episodeNumber
+        val extractorsFactory = DefaultExtractorsFactory()
+            .setMp3ExtractorFlags(Mp3Extractor.FLAG_ENABLE_CONSTANT_BITRATE_SEEKING)
+
+        val dataSourceFactory = DefaultDataSourceFactory(this, "exoplayer-sample")
+
+        val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory, extractorsFactory)
+            .createMediaSource(MediaItem.fromUri(url))
+
         player?.apply {
-            setMediaItem(MediaItem.fromUri(url))
+
+//if start having error in loading remove lq option and change back to -->
+//            setMediaItem(MediaItem.fromUri(mediaSource))
+            setMediaSource(mediaSource)
             prepare()
 
             // Restore position if it's the same episode
             if (episodeNumber == preferencesManager.getLastEpisodeNumber()) {
                 val position = preferencesManager.getLastPlaybackPosition()
-                seekTo(maxOf(0L, position - 15000)) // Resume 15 seconds earlier
+                seekTo(maxOf(0L, position)) // Resume 15 seconds earlier
             }
 
             play()
