@@ -225,12 +225,12 @@ fun PlayerScreen(
                 highQulity = newValue
                 playerService.player?.let {
                     playerService.preferencesManager.saveEpisodeState(
-                        episodeNumber,
+                        currentEpisode,
                         it.currentPosition
                     )
-                    val url = EpisodeManager.generateEpisodeUrl(episodeNumber)
+                    val url = EpisodeManager.generateEpisodeUrl(currentEpisode)
 
-                    playerService.loadAndPlay(url,episodeNumber)
+                    playerService.loadAndPlay(url,currentEpisode)
                 }
                 playerService.preferencesManager.saveHighQuality(newValue)
             },
