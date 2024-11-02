@@ -12,17 +12,19 @@ This app was built using **Jetpack Compose** and developed with the assistance o
 - Control playback speed.  
 - Sleep timer to stop playback automatically.  
 - Auto-play next episode.  
-- Saves your position in an episode for easy resuming on re-opening.  
+- Saves your position in an episode for easy resuming on re-opening.
+- Choose between high and low quality for bandwidth-impaired users.
 
 ## To-Do List  
-- **Check if a selected episode is available** by calculating the weeks that have passed.  
+- **Check if a selected episode is available** by calculating the weeks that have passed or RSS feed.  
 - **Send notifications** when a new episode is released.  
-- **Quality options** Choose between high and low settings for bandwidth-impaired users.
 - **Explanation** how to use the app.
 - **Add light/dark theme** option.  
 - **Fix notification buttons**.  
 - **Fix broadcast receiver for headset controls**.  
 - **Display artist art from metadata** in the player.  
+- **Search** in the description of episodes (save in an offline file).
+- **Save position** for multiple episodes.
 - **Add download options**:  
   - Download individual episodes and show notes.  
   - Batch download episodes.
